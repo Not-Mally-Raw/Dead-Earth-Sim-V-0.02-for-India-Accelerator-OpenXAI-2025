@@ -1,0 +1,139 @@
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { Stethoscope, MessageCircle, History, AlertTriangle } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+
+const navigationItems = [
+  {
+    title: "Symptom Check",
+    url: createPageUrl("SymptomChecker"),
+    icon: MessageCircle,
+  },
+  {
+    title: "History",
+    url: createPageUrl("History"),
+    icon: History,
+  }
+];
+
+export default function Layout({ children, currentPageName }) {
+  const location = useLocation();
+
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+        <style>
+          {`
+            :root {
+              --medical-blue: #0066cc;
+              --soft-blue: #e6f2ff;
+              --success-green: #10b981;
+              --warning-amber: #f59e0b;
+              --danger-red: #ef4444;
+            }
+          `}
+        </style>
+        
+        <Sidebar className="border-r border-blue-100 bg-white/80 backdrop-blur-sm">
+          <SidebarHeader className="border-b border-blue-100 p-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Stethoscope className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="font-bold text-gray-900 text-lg">HealthCheck AI</h2>
+                <p className="text-sm text-blue-600 font-medium">Symptom Assessment</p>
+              </div>
+            </div>
+          </SidebarHeader>
+          
+          <SidebarContent className="p-4">
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                Navigation
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu className="space-y-2">
+                  {navigationItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton 
+                        asChild 
+                        className={`hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 rounded-xl ${
+                          location.pathname === item.url ? 'bg-blue-50 text-blue-700 shadow-sm' : ''
+                        }`}
+                      >
+                        <Link to={item.url} className="flex items-center gap-3 px-4 py-3">
+                          <item.icon className="w-5 h-5" />
+                          <span className="font-medium">{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            <SidebarGroup className="mt-6">
+              <SidebarGroupContent>
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-red-800 text-sm mb-2">Emergency?</h3>
+                      <p className="text-xs text-red-700 mb-3">
+                        If experiencing severe symptoms, call emergency services immediately.
+                      </p>
+                      <div className="space-y-1 text-xs">
+                        <div className="text-red-800 font-semibold">🚨 Emergency: 911</div>
+                        <div className="text-red-700">🏥 Poison Control: 1-800-222-1222</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+
+          <SidebarFooter className="border-t border-blue-100 p-6">
+            <div className="bg-blue-50 rounded-xl p-4">
+              <p className="text-xs text-blue-700 font-medium mb-2">⚠️ Medical Disclaimer</p>
+              <p className="text-xs text-blue-600">
+                This tool provides general guidance only. Always consult with healthcare professionals for proper medical advice.
+              </p>
+            </div>
+          </SidebarFooter>
+        </Sidebar>
+
+        <main className="flex-1 flex flex-col">
+          <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 px-6 py-4 md:hidden">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="hover:bg-blue-50 p-2 rounded-lg transition-colors duration-200" />
+              <div className="flex items-center gap-2">
+                <Stethoscope className="w-5 h-5 text-blue-600" />
+                <h1 className="text-lg font-bold text-gray-900">HealthCheck AI</h1>
+              </div>
+            </div>
+          </header>
+
+          <div className="flex-1 overflow-auto">
+            {children}
+          </div>
+        </main>
+      </div>
+    </SidebarProvider>
+  );
+}
