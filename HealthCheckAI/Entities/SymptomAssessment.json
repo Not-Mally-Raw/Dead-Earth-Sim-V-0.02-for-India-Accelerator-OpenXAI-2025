@@ -1,0 +1,91 @@
+{
+  "name": "SymptomAssessment",
+  "type": "object",
+  "properties": {
+    "symptoms": {
+      "type": "array",
+      "description": "List of reported symptoms",
+      "items": {
+        "type": "string"
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "mild",
+        "moderate",
+        "severe",
+        "emergency"
+      ],
+      "description": "Overall severity assessment"
+    },
+    "primary_complaint": {
+      "type": "string",
+      "description": "Main symptom or concern"
+    },
+    "duration": {
+      "type": "string",
+      "description": "How long symptoms have been present"
+    },
+    "age_range": {
+      "type": "string",
+      "enum": [
+        "child",
+        "teen",
+        "adult",
+        "senior"
+      ],
+      "description": "Age group for more accurate assessment"
+    },
+    "possible_conditions": {
+      "type": "array",
+      "description": "AI-suggested possible conditions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Recommended next steps",
+      "items": {
+        "type": "string"
+      }
+    },
+    "chat_history": {
+      "type": "array",
+      "description": "Complete chat conversation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "user",
+              "bot"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "primary_complaint"
+  ]
+}
